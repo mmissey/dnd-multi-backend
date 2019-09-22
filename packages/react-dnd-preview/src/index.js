@@ -7,15 +7,13 @@ const getStyle = (props) => {
 };
 
 const Preview = (props) => {
-  const collectedProps = useDragLayer({
-    collect: (monitor) => {
-      return {
-        currentOffset: monitor.getSourceClientOffset(),
-        isDragging: monitor.isDragging(),
-        itemType: monitor.getItemType(),
-        item: monitor.getItem(),
-      };
-    },
+  const collectedProps = useDragLayer((monitor) => {
+    return {
+      currentOffset: monitor.getSourceClientOffset(),
+      isDragging: monitor.isDragging(),
+      itemType: monitor.getItemType(),
+      item: monitor.getItem(),
+    };
   });
 
   if (!collectedProps.isDragging || collectedProps.currentOffset === null) {

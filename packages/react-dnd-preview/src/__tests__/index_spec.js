@@ -8,11 +8,16 @@ import Preview from '../index';
 let FIXME_super_huge_hack_cant_understand_what_is_going_on = null; // eslint-disable-line id-length
 
 describe('Preview subcomponent', () => {
+  let _backend;
+
   const createComponent = ({generator = () => { return null; }, source = null} = {}) => {
     FIXME_super_huge_hack_cant_understand_what_is_going_on = generator;
     return mount(
       <div>
-        <DndProvider backend={TestBackend}>
+        <DndProvider backend={(manager) => {
+          _backend = TestBackend(manager);
+          return _backend;
+        }}>
           {source}
           <Preview generator={(...args) => {
             return FIXME_super_huge_hack_cant_understand_what_is_going_on(...args);
@@ -24,13 +29,12 @@ describe('Preview subcomponent', () => {
 
   test('is a DragLayer-decorated Preview', () => {
     const component = createComponent().find(Preview);
-    expect(component.name()).toBe('DragLayer(Preview)');
-    expect(component.instance()).toBeInstanceOf(Preview);
+    expect(component.name()).toBe('Preview');
   });
 
   test('is null when DnD is not in progress', () => {
     const component = createComponent().find(Preview);
-    expect(component.html()).toEqual('');
+    expect(component.html()).toBeNull();
   });
 
   test('is valid when DnD is in progress', () => {
@@ -47,9 +51,7 @@ describe('Preview subcomponent', () => {
 
     const root = createComponent({generator, source: <Source />});
 
-    const instance = root.find(Source).instance();
-    const backend = instance.manager.getBackend();
-    backend.simulateBeginDrag([instance.getHandlerId()], {
+    _backend.simulateBeginDrag([instance.getHandlerId()], {
       clientOffset: {x: 1, y: 2},
       getSourceClientOffset: () => {
         return {x: 1000, y: 2000};

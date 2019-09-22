@@ -15,6 +15,7 @@ export default class Preview extends PureComponent {
   }
 
   backendChanged = (backend) => {
+    console.log('state change!', backend.previewEnabled())
     this.setState({enabled: backend.previewEnabled()});
   }
 
@@ -23,9 +24,11 @@ export default class Preview extends PureComponent {
   }
 
   render() {
+    console.log('render');
     if (!this.state.enabled) {
       return null;
     }
+    console.log('preview');
     return <DnDPreview {...this.props} />;
   }
 }
