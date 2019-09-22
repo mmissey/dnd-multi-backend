@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import TestBackend from 'react-dnd-test-backend-cjs';
-import { DndProvider, DragSource } from 'react-dnd-cjs';
+import { DndProvider, useDrag } from 'react-dnd-cjs';
 
 import Preview from '../index';
 
@@ -39,18 +38,12 @@ describe('Preview subcomponent', () => {
       return <div style={style}>{item.coucou}: {type}</div>;
     };
 
-    const Source = (
-      @DragSource('toto', {
-        beginDrag: () => { return {coucou: 'dauphin'}; },
-        canDrag: () => { return true; },
-      }, (connect) => {
-        return {connectDragSource: connect.dragSource()};
-      })
-      class DS extends React.Component {
-        static propTypes = {connectDragSource: PropTypes.func}
-        render() { return this.props.connectDragSource(<div />); }
-      }
-    );
+    const Source = () => {
+      const [_, drag] = useDrag({
+        item: {type: 'toto', coucou: 'dauphin'},
+      });
+      return <div ref={drag} />;
+    };
 
     const root = createComponent({generator, source: <Source />});
 
