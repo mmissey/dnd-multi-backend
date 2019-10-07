@@ -16,7 +16,7 @@ Just include the `Preview` component close to the top component of your applicat
 
 This function will take 3 arguments: `itemType`, `item` (both defined by the `DragSource`) and `style` which will be used to position the preview element. The function needs to return something that React can render (React component, `null`, etc).
 
-See also the [examples](examples/) for more information.
+See also the [examples](./examples/) for more information.
 
 ```js
   import Preview from 'react-dnd-preview';
